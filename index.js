@@ -1,3 +1,5 @@
+const { hashText } = require("./hashing");
+
 const app = require("express")();
 const http = require("http").createServer(app);
 const io = require("socket.io")(http, {
@@ -34,6 +36,7 @@ io.on("connection", (socket) => {
   // Manejar el evento messageToUser para enviar mensajes a un usuario específico
   socket.on("messageToUser", (data) => {
     const { userId, message } = data;
+    console.log(message, hashText(message))
     const userSocket = connectedUsers[userId];
     if (userSocket) {
       userSocket.emit("new_message", message); // Enviar el mensaje al usuario específico
