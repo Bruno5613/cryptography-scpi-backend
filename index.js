@@ -45,7 +45,21 @@ io.on("connection", (socket) => {
       console.log(`Usuario con ID ${userId} no encontrado.`);
     }
   });
+
+  socket.on("publicToUser", (data) => {
+    const { userId, message } = data;
+    console.log(message, hashText(message))
+    const userSocket = connectedUsers[userId];
+    if (userSocket) {
+      userSocket.emit("new_public", message); // Enviar el mensaje al usuario específico
+      console.log(`Enviado desde servidor`);
+    } else {
+      console.log(`Usuario con ID ${userId} no encontrado.`);
+    }
+  });
 });
+
+
 
 app.get("/", (req, res) => {
   res.send("<h1>Hey Socket.io</h1>");
